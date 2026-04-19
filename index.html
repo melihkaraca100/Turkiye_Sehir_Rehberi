@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const SehirRehberiApp());
+
+class SehirRehberiApp extends StatelessWidget {
+  const SehirRehberiApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.red, useMaterial3: true),
+      home: const AnaSayfa(),
+    );
+  }
+}
+
+// ANA SAYFA 
+class AnaSayfa extends StatelessWidget {
+  const AnaSayfa({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Türkiye Şehir Rehberi"), centerTitle: true),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          
+            const Icon(Icons.map_outlined, size: 150, color: Colors.red),
+            const SizedBox(height: 30),
+            const Text("Şehirleri Keşfet", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ListeSayfasi())),
+              style: ElevatedButton.styleFrom(minimumSize: const Size(200, 60)),
+              child: const Text("Listeye Git"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// LİSTE SAYFASI
+class ListeSayfasi extends StatelessWidget {
+  const ListeSayfasi({super.key});
+
+  final List<Map<String, dynamic>> sehirler = const [
+    {"ad": "İstanbul", "simge": Icons.fort, "detay": "Kız Kulesi ve Boğaz'ın eşsiz güzelliği."},
+    {"ad": "Ankara", "simge": Icons.account_balance, "detay": "Başkentimiz ve Anıtkabir'in manevi huzuru."},
+    {"ad": "İzmir", "simge": Icons.watch_later_outlined, "detay": "Tarihi Saat Kulesi ve Ege'nin incisi İzmir."}
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Gezilecek Şehirler")),
+      body: ListView.builder(
+        itemCount: sehirler.length,
+        itemBuilder: (context, index) {
+          return Card(
+            margin: const EdgeInsets.all(10),
+            child: ListTile(
+              leading: Icon(sehirler[index]["simge"], color: Colors.red, size: 40),
+              title: Text(sehirler[index]["ad"], style: const TextStyle(fontWeight: FontWeight.bold)),
+              trailing: const Icon(Icons.arrow_forward),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetaySayfasi(sehir: sehirler[index]))),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// DETAY SAYFASI
+class DetaySayfasi extends StatelessWidget {
+  final Map<String, dynamic> sehir;
+  const DetaySayfasi({super.key, required this.sehir});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(sehir["ad"])),
+      body: Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            Icon(sehir["simge"], size: 200, color: Colors.red),
+            const SizedBox(height: 20),
+            Text(sehir["ad"], style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Text(sehir["detay"], textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
